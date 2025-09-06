@@ -5,14 +5,13 @@ import (
 	"os"
 )
 
-type Mysql struct {
+type Postgres struct {
 	Host string
 	Port string
-	User string
 	Password string
 	Name string
 }
-var MysqlConfig Mysql 
+var PostgresConfig Postgres 
 
 func LoadPostgresConfig() error {
 	host, exist := os.LookupEnv("PG_HOST")
@@ -23,10 +22,7 @@ func LoadPostgresConfig() error {
 	if !exist{
 		return errors.New("PORT is not set in .env")
 	}
-	user, exist := os.LookupEnv("DB_USER")
-	if !exist{
-		return errors.New("DB_USER is not set in .env")
-	}
+
 	pwd, exist := os.LookupEnv("DB_PASSWORD")
 	if !exist{
 		return errors.New("DB_PASSWORD is not set in .env")
@@ -35,10 +31,9 @@ func LoadPostgresConfig() error {
 	if !exist{
 		return errors.New("PG_HOST is not set in .env")
 	}
-	MysqlConfig = Mysql{
+	PostgresConfig = Postgres{
 		Host: host, 
 		Port: port, 
-		User: user, 
 		Password: pwd, 
 		Name: name,
 

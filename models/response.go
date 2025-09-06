@@ -5,11 +5,15 @@ import (
 
 )
 
-type Request struct{
+type Response struct{
 	Owner    string   `json:"owner"`
 	Repo	 string   `json:"repo"`
 	Version  string   `json:"version"`
-	CreatedAt time.Time  `json:"created_at"`
-	UpdatedAt time.Time  `json:"updated_at"`
+	CreatedAt time.Time  `json:"created_at,omitempty"`
+	UpdatedAt time.Time  `json:"updated_at,omitempty"`
 
+}
+type DbResponse struct {
+	ID int 
+	Response 
 }
