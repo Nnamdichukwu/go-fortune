@@ -1,10 +1,6 @@
 package models
 
-
-
-
-type Request struct{
-	Owner    string   `json:"owner"`
-	Repo	 string   `json:"repo"`
-	
+type Request struct {
+	Owner string `json:"owner"`
+	Repo  string `json:"repo"`
 }

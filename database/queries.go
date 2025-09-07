@@ -13,13 +13,13 @@ import (
 )
 
 func GetVersionById(ctx context.Context, db *sql.DB, id int) (*models.DbResponse, error) {
-	query :=`SELECT id, owner, repo, version  FROM packages WHERE id = $1`
+	query := `SELECT id, owner, repo, version  FROM packages WHERE id = $1`
 	row := db.QueryRowContext(ctx, query, id)
-	
+
 	var resp models.DbResponse
 
 	if err := row.Scan(&resp.ID, &resp.Owner, &resp.Repo, &resp.Version); err != nil {
-		if errors.Is(err, sql.ErrNoRows){
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
 		return nil, err
@@ -28,14 +28,14 @@ func GetVersionById(ctx context.Context, db *sql.DB, id int) (*models.DbResponse
 
 }
 
-func GetVersionByOwner(ctx context.Context, db *sql.DB, owner string) (*models.DbResponse, error){
-	query :=`SELECT id, owner, repo, version  FROM packages WHERE owner = $1`
+func GetVersionByOwner(ctx context.Context, db *sql.DB, owner string) (*models.DbResponse, error) {
+	query := `SELECT id, owner, repo, version  FROM packages WHERE owner = $1`
 	row := db.QueryRowContext(ctx, query, owner)
-	
+
 	var resp models.DbResponse
 
 	if err := row.Scan(&resp.ID, &resp.Owner, &resp.Repo, &resp.Version); err != nil {
-		if errors.Is(err, sql.ErrNoRows){
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
 		return nil, err
@@ -43,14 +43,14 @@ func GetVersionByOwner(ctx context.Context, db *sql.DB, owner string) (*models.D
 	return &resp, nil
 }
 
-func GetVersionByRepo(ctx context.Context, db *sql.DB, repo string) (*models.DbResponse, error){
-	query :=`SELECT id, owner, repo, version  FROM packages WHERE repo = $1`
+func GetVersionByRepo(ctx context.Context, db *sql.DB, repo string) (*models.DbResponse, error) {
+	query := `SELECT id, owner, repo, version  FROM packages WHERE repo = $1`
 	row := db.QueryRowContext(ctx, query, repo)
-	
+
 	var resp models.DbResponse
 
 	if err := row.Scan(&resp.ID, &resp.Owner, &resp.Repo, &resp.Version); err != nil {
-		if errors.Is(err, sql.ErrNoRows){
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
 		return nil, err
@@ -58,14 +58,14 @@ func GetVersionByRepo(ctx context.Context, db *sql.DB, repo string) (*models.DbR
 	return &resp, nil
 }
 
-func GetVersionByOwnerAndRepo(ctx context.Context, db *sql.DB, owner string, repo string) (*models.DbResponse, error){
-	query :=`SELECT id, owner, repo, version  FROM packages WHERE owner = $1 AND repo = $2`
+func GetVersionByOwnerAndRepo(ctx context.Context, db *sql.DB, owner string, repo string) (*models.DbResponse, error) {
+	query := `SELECT id, owner, repo, version  FROM packages WHERE owner = $1 AND repo = $2`
 	row := db.QueryRowContext(ctx, query, owner)
-	
+
 	var resp models.DbResponse
 
 	if err := row.Scan(&resp.ID, &resp.Owner, &resp.Repo, &resp.Version); err != nil {
-		if errors.Is(err, sql.ErrNoRows){
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
 		return nil, err
@@ -73,10 +73,10 @@ func GetVersionByOwnerAndRepo(ctx context.Context, db *sql.DB, owner string, rep
 	return &resp, nil
 }
 
-func UpdateVersion(ctx context.Context, db *sql.DB, owner string, repo string, new_version string)error {
+func UpdateVersion(ctx context.Context, db *sql.DB, owner string, repo string, new_version string) error {
 	resp, err := GetVersionByOwnerAndRepo(ctx, db, owner, repo)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows){
+		if errors.Is(err, sql.ErrNoRows) {
 			return err
 		}
 		return err
@@ -84,19 +84,19 @@ func UpdateVersion(ctx context.Context, db *sql.DB, owner string, repo string, n
 
 	current_version, err := version.NewVersion(resp.Version)
 	if err != nil {
-		return err 
+		return err
 	}
 	latest_version, err := version.NewVersion(new_version)
 	if err != nil {
 		return err
 	}
 
-	if !current_version.LessThan(latest_version){
+	if !current_version.LessThan(latest_version) {
 		return errors.New("the current version is more recent than the latest version")
 	}
 	query := `UPDATE packages SET version = $1, updated_at= $2 WHERE owner = $3 and repo = $4`
-	res, err := db.ExecContext(ctx, query,latest_version,time.Now(), owner, repo )
-	if err != nil{
+	res, err := db.ExecContext(ctx, query, latest_version, time.Now(), owner, repo)
+	if err != nil {
 		return fmt.Errorf("updated failed due to: %w", err)
 	}
 	rowNo, err := res.RowsAffected()
@@ -109,4 +109,3 @@ func UpdateVersion(ctx context.Context, db *sql.DB, owner string, repo string, n
 
 	return nil
 }
-
