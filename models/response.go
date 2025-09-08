@@ -11,7 +11,14 @@ type Response struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
-type DbResponse struct {
+type PackageResponse struct {
 	ID int
 	Response
+}
+
+type VersionUpdate struct {
+	Owner string `json:"owner"`
+	Repo string `json:"repo"`
+	Version string `json:"version"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

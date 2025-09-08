@@ -15,9 +15,9 @@ type Postgres struct {
 var PostgresConfig Postgres
 
 func LoadPostgresConfig() error {
-	host, exist := os.LookupEnv("PG_HOST")
+	host, exist := os.LookupEnv("DB_HOST")
 	if !exist {
-		return errors.New("PG_HOST is not set in .env")
+		return errors.New("DB_HOST is not set in .env")
 	}
 	port, exist := os.LookupEnv("DB_PORT")
 	if !exist {
@@ -30,7 +30,7 @@ func LoadPostgresConfig() error {
 	}
 	name, exist := os.LookupEnv("DB_NAME")
 	if !exist {
-		return errors.New("PG_HOST is not set in .env")
+		return errors.New("DB_NAME is not set in .env")
 	}
 	PostgresConfig = Postgres{
 		Host:     host,
