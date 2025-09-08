@@ -19,12 +19,12 @@ func main() {
 	}
 	fmt.Println("Env Vars loaded")
 
-	ctx := context.Background()
+	ctx := context.WithTimeout(context.Background(), 10*time.Second)
 
 	if err := database.ConnectPostgresDB(config.PostgresConfig); err != nil {
 		log.Fatal(err)
 	}
-	
+
 	fmt.Println("Connected succesfuly to postgres")
 
 	defer database.PostgresDB.Close()
