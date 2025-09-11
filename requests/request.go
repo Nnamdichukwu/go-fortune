@@ -16,6 +16,11 @@ type GithubRelease struct {
 	Body string `json:"body"`
 	Name string `json:"name"`
 }
+type GithubReleaseWithRepo struct{
+	Owner string 
+	Repo string
+	Release GithubRelease
+}
 
 func ChangeLog(r Request) (GithubRelease, error){
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/releases/latest", r.Owner, r.Repo)
